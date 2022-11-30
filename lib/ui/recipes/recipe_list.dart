@@ -13,6 +13,10 @@ import '../colors.dart';
 import 'package:chopper/chopper.dart';
 import '../../network/model_response.dart';
 
+import '../../data/models/models.dart';
+import '../../mock_service/mock_service.dart';
+import 'package:provider/provider.dart';
+
 class RecipeList extends StatefulWidget {
   const RecipeList({Key? key}) : super(key: key);
 
@@ -194,6 +198,7 @@ class _RecipeListState extends State<RecipeList> {
       return Container();
     }
 
+    //Provider.of<MockService>(context)
     return FutureBuilder<Response<Result<APIRecipeQuery>>>(
       future: RecipeService.create().queryRecipes(
           searchTextController.text.trim(),
@@ -273,7 +278,16 @@ class _RecipeListState extends State<RecipeList> {
       onTap: () {
         Navigator.push(topLevelContext, MaterialPageRoute(
           builder: (context) {
-            return const RecipeDetails();
+            final detailRecipe = Recipe(
+                label: recipe.label,
+                image: recipe.image,
+                url: recipe.url,
+                calories: recipe.calories,
+                totalTime: recipe.totalTime,
+                totalWeight: recipe.totalWeight);
+            detailRecipe.ingredients =
+                convertIngredients(recipe.ingredients);
+            return RecipeDetails(recipe: detailRecipe);
           },
         ));
       },
