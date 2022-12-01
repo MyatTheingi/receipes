@@ -5,7 +5,6 @@ import '../widgets/custom_dropdown.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../network/recipe_model.dart';
-import '../../network/recipe_service.dart';
 import '../recipe_card.dart';
 import '../recipes/recipe_details.dart';
 import '../colors.dart';
@@ -14,7 +13,7 @@ import 'package:chopper/chopper.dart';
 import '../../network/model_response.dart';
 
 import '../../data/models/models.dart';
-import '../../mock_service/mock_service.dart';
+import '../../network/service_interface.dart';
 import 'package:provider/provider.dart';
 
 class RecipeList extends StatefulWidget {
@@ -198,9 +197,8 @@ class _RecipeListState extends State<RecipeList> {
       return Container();
     }
 
-    //Provider.of<MockService>(context)
     return FutureBuilder<Response<Result<APIRecipeQuery>>>(
-      future: RecipeService.create().queryRecipes(
+      future:  Provider.of<ServiceInterface>(context).queryRecipes(
           searchTextController.text.trim(),
           currentStartPosition,
           currentEndPosition),

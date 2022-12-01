@@ -5,8 +5,9 @@ import 'ui/main_screen.dart';
 import 'package:provider/provider.dart';
 import 'data/memory_repository.dart';
 
-import 'mock_service/mock_service.dart';
-
+import 'data/repository.dart';
+import 'network/recipe_service.dart';
+import 'network/service_interface.dart';
 
 Future<void> main() async {
   _setupLogging();
@@ -31,16 +32,15 @@ class MyApp extends StatelessWidget {
       // 1
       providers: [
         // 2
-        ChangeNotifierProvider<MemoryRepository>(
+        Provider<Repository>(
           lazy: false,
           create: (_) => MemoryRepository(),
         ),
         // 3
-        Provider(
-          // 4
-          create: (_) => MockService()..create(),
+        Provider<ServiceInterface>(
+          create: (_) => RecipeService.create(),
           lazy: false,
-        ),
+        )
       ],
       // 5
       child: MaterialApp(
